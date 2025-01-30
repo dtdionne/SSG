@@ -1,8 +1,8 @@
 from textnode import *
 
 def main():
-    print("hello world")
+    '''print("hello world")
     test_node = TextNode("dtd", TextType.BOLD_TEXTTYPE)
-    print(test_node)
+    print(test_node)'''
 
 main()
