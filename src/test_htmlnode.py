@@ -1,5 +1,6 @@
 import unittest
-from htmlnode import HTMLNode,LeafNode
+from htmlnode import *
+from textnode import *
 
 class TestHTMLNode(unittest.TestCase):
     def test_props_to_html_no_props(self):
@@ -34,6 +35,36 @@ class TestHTMLNode(unittest.TestCase):
         with self.assertRaises(ValueError):
             node4 = LeafNode("p", None)
             node4.to_html()
+ 
+    def test_text_node_to_html_node(self):
+        # Test TEXT type
+        node1 = TextNode("Hello, world!", TextType.TEXT)
+        html_node1 = text_node_to_html_node(node1)
+        self.assertEqual(html_node1.tag, None)
+        self.assertEqual(html_node1.value, "Hello, world!")
+        self.assertEqual(html_node1.props, None)
+
+        # Test BOLD type
+        node2 = TextNode("Bold text", TextType.BOLD)
+        html_node2 = text_node_to_html_node(node2)
+        self.assertEqual(html_node2.tag, "b")
+        self.assertEqual(html_node2.value, "Bold text")
+        self.assertEqual(html_node2.props, None)
+
+        # Test LINK type
+        node3 = TextNode("Click me", TextType.LINK, "https://boot.dev")
+        html_node3 = text_node_to_html_node(node3)
+        self.assertEqual(html_node3.tag, "a")
+        self.assertEqual(html_node3.value, "Click me")
+        self.assertEqual(html_node3.props, {"href": "https://boot.dev"})
+
+        # Test invalid type
+        with self.assertRaises(Exception):
+            invalid_node = TextNode("test", "invalid_type")
+            text_node_to_html_node(invalid_node)
+
+
+
 
 if __name__ == "__main__":
     unittest.main()
