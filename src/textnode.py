@@ -53,7 +53,10 @@ def text_to_textnodes(text):
 #SPLIT_NODES.PY
 
 #from text_node import TextNode, TextType
-from textnode import TextNode, TextType
+#from textnode import TextNode, TextType
+
+def markdown_to_blocks(markdown):
+    return [block.strip() for block in re.split(r'\n\s*\n', markdown.strip())]
 
 
 def split_nodes_delimiter(old_nodes, delimiter, text_type):
@@ -188,3 +191,44 @@ if __name__ == "__main__":
     print("Testing extract_markdown_links...")
     markdown_text = "This has a link [to Boot.dev](https://boot.dev) and [to Google](https://google.com)"
     print(extract_markdown_links(markdown_text))
+
+def test_markdown_to_blocks():
+    # Test case 1: Basic blocks
+    markdown = """This is paragraph 1.
+
+This is paragraph 2."""
+    expected = [
+        "This is paragraph 1.",
+        "This is paragraph 2."
+    ]
+    assert markdown_to_blocks(markdown) == expected
+
+    # Test case 2: Multiple blank lines between blocks
+    markdown = """This is paragraph 1.
+
+
+This is paragraph 2."""
+    expected = [
+        "This is paragraph 1.",
+        "This is paragraph 2."
+    ]
+    assert markdown_to_blocks(markdown) == expected
+
+    # Test case 3: Lists and headings
+    markdown = """# Header
+
+* List item 1
+* List item 2
+
+Final paragraph."""
+    expected = [
+        "# Header",
+        "* List item 1\n* List item 2",
+        "Final paragraph."
+    ]
+    assert markdown_to_blocks(markdown) == expected
+
+    print("All markdown_to_blocks tests passed!")
+
+if __name__ == "__main__":
+    test_markdown_to_blocks()
